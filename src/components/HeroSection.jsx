@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function HeroSection() {
   return (
-    <div className="flex flex-col items-center gap-4 text-[#404040] my-5 mx-5">
+    <div className="flex flex-col items-center gap-4 text-[#404040] my-5 mx-5 py-36">
         <img src="../../public/Empty State.png" alt="hero section" />
         <div className="flex flex-col items-center "> 
             <p className="text-lg font-medium">No job opening available</p>

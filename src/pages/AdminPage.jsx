@@ -3,6 +3,7 @@ import SearchInput from '../components/SearchInput'
 import HeroSection from '../components/HeroSection'
 import CreateCard from '../components/CreateCard'
 import JobLists from '../components/JobLists'
+import AdminHome from '../components/AdminHome'
 
 export default function AdminPage() {
   return (
@@ -11,10 +12,7 @@ export default function AdminPage() {
         <div className='flex'>
           <div className='flex flex-col w-250'>
             <SearchInput />
-            <div className>
-            <JobLists />
-            <JobLists />
-            </div>
+            <AdminHome />
           </div>
           <CreateCard />
         </div>
