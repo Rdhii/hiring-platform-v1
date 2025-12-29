@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar'
 import SearchInput from '../components/SearchInput'
 import HeroSection from '../components/HeroSection'
 import CreateCard from '../components/CreateCard'
+import JobLists from '../components/JobLists'
 
 export default function AdminPage() {
   return (
@@ -10,7 +11,10 @@ export default function AdminPage() {
         <div className='flex'>
           <div className='flex flex-col w-250'>
             <SearchInput />
-            <HeroSection />
+            <div className>
+            <JobLists />
+            <JobLists />
+            </div>
           </div>
           <CreateCard />
         </div>
