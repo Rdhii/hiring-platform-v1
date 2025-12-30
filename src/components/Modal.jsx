@@ -2,8 +2,23 @@ import { X } from "lucide-react";
 import React, { useState } from "react";
 import Select from "react-select";
 
-export default function Modal() {
+export default function Modal({ openModal, setOpenModal }) {
   const [selectedJobType, setSelectedJobType] = useState(null);
+
+  const [profileRequirements, setProfileRequirements] = useState({
+    fullName: "Mandatory",
+    photoProfile: "Mandatory",
+    gender: "Optional",
+    domicile: "Optional",
+    email: "Mandatory",
+    phoneNumber: "Mandatory",
+    linkedinLink: "Optional",
+    dateOfBirth: "Optional",
+  });
+
+  const handleRequirementChange = (field, value) => {
+    setProfileRequirements((prev) => ({ ...prev, [field]: value }));
+  };
 
   const options = [
     { value: "full-time", label: "Full-time" },
@@ -38,13 +53,20 @@ export default function Modal() {
     }),
   };
 
+  const closeModal = () => {
+    setOpenModal(false);
+  }
+
   return (
-    <div className="flex flex-col w-225 h-195 border rounded-xl mx-auto my-15">
-      <div className="flex items-center justify-between p-6 border-b border-gray-300">
+    <div className={`fixed inset-0 flex items-center justify-center z-50 ${!openModal ? "hidden" : ""}`}>
+      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="relative bg-white flex flex-col w-225 max-h-[80vh] border border-gray-300 rounded-xl shadow-2xl">
+      <div className="flex items-center justify-between p-6 border-b border-gray-300 sticky top-0 z-50">
         <p className="font-medium">Job Opening</p>
-        <X className="size-5" />
+        <X onClick={closeModal} className="size-5 cursor-pointer" />
       </div>
-      <div className="flex flex-col p-6 gap-4">
+      <div className="overflow-y-auto">
+      <div className="flex flex-col p-6 gap-4 ">
         <label className="text-sm">Job Name*</label>
         <input
           className="border border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2"
@@ -86,14 +108,40 @@ export default function Modal() {
           </div>
         </div>
       </div>
-      <div className="border mx-6">
+      <div className="border mx-6 p-4 rounded-lg border-gray-300">
         <label>Minimum Profile Information Required</label>
-        <div>
-            <div>
-                <label>Full name</label>
-                <input type="radio" />
+        <div className="m-4 ">
+          {[
+            { key: "fullName", label: "Full Name" },
+            { key: "photoProfile", label: "Photo Profile" },
+            { key: "gender", label: "Gender"},
+            { key: "domicile", label: "Domicile" },
+            { key: "email", label: "Email" },
+            { key: "phoneNumber", label: "Phone Number" },
+            { key: "linkedinLink", label: "LinkedIn Link" },
+            { key: "dateOfBirth", label: "Date of Birth" },
+          ].map(({ key, label}) => (
+            <div key={key}
+              className="flex justify-between items-center border-b border-gray-200 px-2 py-3">
+                <label>{label}</label>
+                <div className="flex gap-2">
+                  {["Mandatory", "Optional", "Off"].map((item) => (
+                    <button key={item} onClick={() => handleRequirementChange(key, item)}
+                      className={`px-4 py-1 rounded-full border  ${
+                        profileRequirements[key] === item ? "text-[#01959F]" : "border-gray-300"
+                      }`}>
+                      {item}
+                    </button>
+                  ))}
+                </div>
             </div>
+          ))}
         </div>
+      </div>
+      </div>
+      <div className="flex justify-end border-t mt-6 border-gray-300 sticky bottom-0  z-50">
+      <button className="m-6 px-4 py-1 bg-[#01959F] rounded-lg text-white disabled:bg-gray-300 disabled:text-gray-500">Publish Job</button>
+      </div>
       </div>
     </div>
   );
