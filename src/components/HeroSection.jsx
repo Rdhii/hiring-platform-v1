@@ -9,7 +9,7 @@ export default function HeroSection( {handleOpenModal} ) {
             <p className="text-lg font-medium">No job opening available</p>
             <p>Create a job now opening now and the start the candidates process.</p>
         </div>
-        <button onClick={handleOpenModal} className="bg-[#FBC037] py-1.5 px-4 rounded-lg font-medium hover:bg-amber-500">Create a new job</button>
+        <button onClick={handleOpenModal} className="bg-[#FBC037] py-1.5 px-4 rounded-lg font-medium hover:bg-amber-500 cursor-pointer    ">Create a new job</button>
     </div>
   )
 }
