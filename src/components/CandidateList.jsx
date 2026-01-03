@@ -27,14 +27,14 @@ export default function CandidateList() {
   return (
     <div className="mt-6 space-y-4 px-5">
       <h1 className="font-bold">Front End Developer</h1>
-      <div className="border flex flex-col gap-6 py-44 rounded-lg border-gray-300">
+      <div className="border flex flex-col gap-6 rounded-lg border-gray-300">
         <div className="border border-gray-300 rounded-lg shadow-sm overflow-hidden bg-white m-6">
             <div className="overflow-x-auto">
             <table className="min-w-full text-sm text-gray-700 ">
                 <thead className="bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 <tr>
                     <th className="px-4 py-3 w-10">
-                    <input type="checkbox" className="h-4 w-4" />
+                    <input type="checkbox" className="h-4 w-4 " />
                     </th>
                     <th className="px-4 py-3">Nama Lengkap</th>
                     <th className="px-4 py-3">Email Address</th>
@@ -47,11 +47,11 @@ export default function CandidateList() {
                 </thead>
                 <tbody>
                 {candidates.map((c) => (
-                    <tr key={c.id} className="border-t hover:bg-gray-50">
+                    <tr key={c.id} className="border-b border-gray-300 hover:bg-gray-50">
                     <td className="px-4 py-3">
                         <input type="checkbox" className="h-4 w-4" />
                     </td>
-                    <td className="px-4 py-3 font-medium text-gray-900">{c.name}</td>
+                    <td className="px-4 py-3">{c.name}</td>
                     <td className="px-4 py-3">{c.email}</td>
                     <td className="px-4 py-3">{c.phone}</td>
                     <td className="px-4 py-3">{c.dob}</td>

@@ -4,10 +4,13 @@ import EmptyManage from '../components/EmptyManage'
 import CandidateList from '../components/CandidateList'
 
 export default function ManagePage() {
+
+  const candidatesData = [];
+
   return (
     <div>
         <NavbarManage />
-        <CandidateList />
+        {candidatesData.length === 0 ? <EmptyManage /> : <CandidateList />}
     </div>
   )
 }
