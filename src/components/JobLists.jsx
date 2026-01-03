@@ -11,7 +11,7 @@ export default function JobLists(job) {
             <p className="font-medium">{job.title}</p>
             <div className="flex justify-between">
                 <p className="text-[#616161]">{job.salary}</p>
-                <Link to="/" className="flex items-end bg-[#01959F] text-white px-4 py-1 text-sm rounded-lg hover:bg-[#017A82]">Manage Job</Link>
+                <Link to="/manage" className="flex items-end bg-[#01959F] text-white px-4 py-1 text-sm rounded-lg hover:bg-[#017A82]">Manage Job</Link>
             </div>
         </div>
     </div>

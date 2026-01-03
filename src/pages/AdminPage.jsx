@@ -32,14 +32,13 @@ const [openModal, setOpenModal] = useState(false);
         <div className='flex'>
           <div className='flex flex-col w-250'>
             <SearchInput />
-            {jobData.map((job) => (
-              <JobLists 
+            {jobData.length === 0 ? (<HeroSection handleOpenModal={handleOpenModal}/>) : (jobData.map((job) => (
+              <JobLists
                 status={job.status}
                 date={job.date}
                 title={job.title}
-                salary={job.salary}
-              />
-            ))}
+                salary={job.salary} />
+            )))}
           </div>
           <CreateCard handleOpenModal={handleOpenModal} />
           <Modal openModal={openModal} setOpenModal={setOpenModal} />
