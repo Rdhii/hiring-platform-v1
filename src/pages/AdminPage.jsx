@@ -3,7 +3,6 @@ import SearchInput from '../components/SearchInput'
 import HeroSection from '../components/HeroSection'
 import CreateCard from '../components/CreateCard'
 import JobLists from '../components/JobLists'
-import AdminHome from '../components/AdminHome'
 import Modal from '../components/Modal'
 import { useState } from 'react'
 
@@ -13,7 +12,7 @@ const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal(!openModal);
   }
-  const jobData = [];
+  // const jobData = [];
 
   return (
     <div className='flex flex-col gap-4'>
@@ -21,7 +20,12 @@ const [openModal, setOpenModal] = useState(false);
         <div className='flex'>
           <div className='flex flex-col w-250'>
             <SearchInput />
-            {jobData.length === 0 ? <HeroSection handleOpenModal={handleOpenModal}/> : <JobLists />}
+            <JobLists 
+              status="Active"
+              date="Started on 1 Oct 2025"
+              title="Front End Developer"
+              salary="Rp 7.000.000 - Rp 8.000.000"
+               />
           </div>
           <CreateCard handleOpenModal={handleOpenModal} />
           <Modal openModal={openModal} setOpenModal={setOpenModal} />
