@@ -12,7 +12,19 @@ const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal(!openModal);
   }
-  // const jobData = [];
+  const jobData = [
+    {
+      status: "Active",
+      date: "Started on 1 Oct 2025",
+      title: "Front End Developer",
+      salary: "Rp 7.000.000 - Rp 8.000.000"},
+    {
+      status: "Inactive",
+      date: "Started on 15 Sep 2025",
+      title: "Back End Developer",
+      salary: "Rp 8.000.000 - Rp 10.000.000"
+    }
+  ];
 
   return (
     <div className='flex flex-col gap-4'>
@@ -20,12 +32,14 @@ const [openModal, setOpenModal] = useState(false);
         <div className='flex'>
           <div className='flex flex-col w-250'>
             <SearchInput />
-            <JobLists 
-              status="Active"
-              date="Started on 1 Oct 2025"
-              title="Front End Developer"
-              salary="Rp 7.000.000 - Rp 8.000.000"
-               />
+            {jobData.map((job) => (
+              <JobLists 
+                status={job.status}
+                date={job.date}
+                title={job.title}
+                salary={job.salary}
+              />
+            ))}
           </div>
           <CreateCard handleOpenModal={handleOpenModal} />
           <Modal openModal={openModal} setOpenModal={setOpenModal} />
