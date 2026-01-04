@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function EmptyManage() {
   return (
     <div className='mt-6 space-y-6 px-5'>

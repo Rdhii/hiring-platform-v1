@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import profileIcon from "../assets/vecteezy_profile-icon-design-vector_5544718.jpg";
+import profileIcon from "../../assets/vecteezy_profile-icon-design-vector_5544718.jpg";
 import { Link } from "react-router-dom";
 
 export default function NavbarManage() {

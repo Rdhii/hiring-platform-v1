@@ -1,9 +1,9 @@
-import Navbar from '../components/Navbar'
-import SearchInput from '../components/SearchInput'
-import HeroSection from '../components/HeroSection'
-import CreateCard from '../components/CreateCard'
-import JobLists from '../components/JobLists'
-import Modal from '../components/Modal'
+import Navbar from '../components/admin/Navbar'
+import SearchInput from '../components/admin/SearchInput'
+import HeroSection from '../components/admin/HeroSection'
+import CreateCard from '../components/admin/CreateCard'
+import JobLists from '../components/admin/JobLists'
+import Modal from '../components/admin/Modal'
 import { useState } from 'react'
 
 export default function AdminPage() {

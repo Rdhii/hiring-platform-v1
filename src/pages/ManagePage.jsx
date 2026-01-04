@@ -1,7 +1,6 @@
-import React from 'react'
-import NavbarManage from '../components/NavbarManage'
-import EmptyManage from '../components/EmptyManage'
-import CandidateList from '../components/CandidateList'
+import NavbarManage from '../components/admin/NavbarManage'
+import EmptyManage from '../components/admin/EmptyManage'
+import CandidateList from '../components/admin/CandidateList'
 
 export default function ManagePage() {
 

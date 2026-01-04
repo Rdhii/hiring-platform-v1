@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function CandidateList({ candidates }) {
   return (
     <div className="mt-6 space-y-4 px-5">

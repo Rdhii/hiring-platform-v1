@@ -1,4 +1,4 @@
-import profileIcon from "../assets/vecteezy_profile-icon-design-vector_5544718.jpg";
+import profileIcon from "../../assets/vecteezy_profile-icon-design-vector_5544718.jpg";
 
 export default function Navbar() {
   return (
