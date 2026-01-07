@@ -6,7 +6,7 @@ export default function JobDetail({ job }) {
       <div className="flex justify-between items-start border-b pb-6 border-[#E0E0E0]">
         <div className="flex gap-6">
           <img
-            src="../../../public/63_human_verify.jpg"
+            src="63_human_verify.jpg"
             className="size-12 border rounded-sm border-gray-300"
           />
           <div className="">
