@@ -1,1 +1,1 @@
-[] Membuat props dan handle untuk data
+[x] Membuat props dan handle untuk data
