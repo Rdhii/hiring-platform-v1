@@ -90,6 +90,22 @@ export default function Resume() {
             </label>
           </div>
         </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm">Domicile<span className="text-[#E11428]">*</span></label>
+          <input type="text" placeholder="Enter your full name" className="border px-4 py-2 rounded-lg border-gray-300" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm">Phone number<span className="text-[#E11428]">*</span></label>
+          <input type="text" placeholder="Enter your full name" className="border px-4 py-2 rounded-lg border-gray-300" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm">Email<span className="text-[#E11428]">*</span></label>
+          <input type="text" placeholder="Enter your full name" className="border px-4 py-2 rounded-lg border-gray-300" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm">Link Linkedin<span className="text-[#E11428]">*</span></label>
+          <input type="text" placeholder="Enter your full name" className="border px-4 py-2 rounded-lg border-gray-300 mb-8" />
+        </div>
       </div>
     </div>
 

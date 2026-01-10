@@ -19,7 +19,7 @@ export default function JobItem({ job, onClick, isActive }) {
             <p className="text-sm">{job.company}</p>
           </div>
         </div>
-        <div className="px-4 pb-3 space-y-2 text-sm text-[#616161] border-dotted border-t border-gray-300">
+        <div className="flex flex-col items-start px-4 pb-3 space-y-2 text-sm text-[#616161] border-dotted border-t border-gray-300">
           <p>{job.location}</p>
           <p>{job.salary}</p>
         </div>
