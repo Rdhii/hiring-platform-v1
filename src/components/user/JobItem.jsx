@@ -12,7 +12,7 @@ export default function JobItem({ job, onClick, isActive }) {
         <div className="px-4 py-3 flex gap-4 items-center">
           <img
             className="size-12 border-gray-300 border rounded-sm"
-            src="../../../public/63_human_verify.jpg"
+            src="/63_human_verify.jpg"
           />
           <div>
             <p className="font-bold text-base">{job.title}</p>
