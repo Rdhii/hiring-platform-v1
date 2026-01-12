@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function JobDetail({ job }) {
   if (!job) return null;
 
@@ -17,7 +19,7 @@ export default function JobDetail({ job }) {
             <p className="text-[14px] text-[#757575]">{job.company}</p>
           </div>
         </div>
-        <button className="bg-[#FBC037] rounded-lg px-4 py-1 text-[14px] cursor-pointer hover:bg-[#E0A800] font-semibold">Apply</button>
+        <Link to="/resume" className="bg-[#FBC037] rounded-lg px-4 py-1 text-[14px] cursor-pointer hover:bg-[#E0A800] font-semibold">Apply</Link>
       </div>
       <div className="mt-6 ">
         <ul className="list-disc pl-6  text-[14px] leading-relaxed text-[#404040]">
