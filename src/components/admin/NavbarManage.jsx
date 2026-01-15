@@ -6,7 +6,7 @@ export default function NavbarManage() {
   return (
     <nav className="flex items-center justify-between px-5 py-4  border-b border-gray-200">
         <div className="flex items-center font-medium text-sm gap-2">
-            <Link to="/" className=" py-1 px-4 rounded-lg border border-gray-300 shadow-sm">Job List</Link>
+            <Link to="/admin" className=" py-1 px-4 rounded-lg border border-gray-300 shadow-sm">Job List</Link>
             <ArrowRight />
             <p className="py-1 px-4 rounded-lg border border-gray-300 bg-[#EDEDED]">Manage Candidate</p>
         </div>
