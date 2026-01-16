@@ -1,3 +1,3 @@
 [x] Membuat props dan handle untuk data
-[] Slicing login and register page
-[] Slicing resume modal
+[x] Slicing login and register page
+[x] Slicing resume modal
