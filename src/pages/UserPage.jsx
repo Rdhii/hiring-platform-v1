@@ -8,12 +8,13 @@ import axios from "axios";
 export default function UserPage() {
   const [jobItems, setJobItems] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
+  const [jobDetail, setJobDetail] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/post/");
+        const response = await axios.get("http://localhost:4000/api/jobs/");
         setJobItems(response.data);
         if (response.data.length > 0) {
           setSelectedId(response.data[0].id);
@@ -26,6 +27,20 @@ export default function UserPage() {
     };
     fetchJobs();
   }, []);
+
+  useEffect(() => {
+    if (!selectedId) return;
+
+    const fetchJobDetail = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/jobs/${selectedId}`);
+        setJobDetail(response.data);
+      } catch (error) {
+        console.error("Error fetching job detail:", error);
+      }
+    };
+    fetchJobDetail();
+  }, [selectedId]);
 
   const selectedJob = selectedId ? jobItems.find((j) => j.id === selectedId) : null;
   const isEmpty = jobItems.length === 0;
@@ -58,7 +73,7 @@ export default function UserPage() {
               />
             ))}
           </div>
-          <JobDetail job={selectedJob} />
+          <JobDetail job={jobDetail || selectedJob} />
         </div>
       )}
     </>

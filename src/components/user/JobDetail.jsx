@@ -13,19 +13,22 @@ export default function JobDetail({ job }) {
           />
           <div className="">
             <p className="bg-[#43936C] text-white px-2 py-0.5 w-fit rounded-sm mb-2 text-[14px]">
-              {job.type}
+              {job.jobType}
             </p>
-            <p className="text-[18px] font-bold">{job.title}</p>
-            <p className="text-[14px] text-[#757575]">{job.company}</p>
+            <p className="text-[18px] font-bold">{job.jobName}</p>
+            <p className="text-[14px] text-[#757575]">Rakamin</p>
           </div>
         </div>
         <Link to="/resume" className="bg-[#FBC037] rounded-lg px-4 py-1 text-[14px] cursor-pointer hover:bg-[#E0A800] font-semibold">Apply</Link>
       </div>
       <div className="mt-6 ">
         <ul className="list-disc pl-6  text-[14px] leading-relaxed text-[#404040]">
-          {job.descriptions?.map((item, idx) => (
-            <li key={idx}>{item}</li>
-          ))}
+          {job.jobDescription
+            ?.split('\n')
+            .filter(item => item.trim() !== '')
+            .map((item, idx) => (
+              <li key={idx}>{item.trim()}</li>
+            ))}
         </ul>
       </div>
     </div>

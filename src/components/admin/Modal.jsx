@@ -1,9 +1,19 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 import Select from "react-select";
+import axios from "axios";
 
 export default function Modal({ openModal, setOpenModal }) {
   const [selectedJobType, setSelectedJobType] = useState(null);
+  const [Loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    jobName: "",
+    jobType: null,
+    jobDescription: "",
+    candidateNeeded: "",
+    minimumSalary: "",
+    maximumSalary: "",
+  })
 
   const [profileRequirements, setProfileRequirements] = useState({
     fullName: "Mandatory",
@@ -16,9 +26,57 @@ export default function Modal({ openModal, setOpenModal }) {
     dateOfBirth: "Optional",
   });
 
+  const handleFormChange = (field, value) => {
+    setFormData((prev) => ({...prev, [field]:value}));
+  }
+
   const handleRequirementChange = (field, value) => {
     setProfileRequirements((prev) => ({ ...prev, [field]: value }));
   };
+
+  const handlePublishJob = async () => {
+    try {
+      setLoading(true);
+      
+      // Validasi input
+      if (!formData.jobName || !selectedJobType || !formData.jobDescription || 
+          !formData.candidateNeeded || !formData.minimumSalary || !formData.maximumSalary) {
+        alert("Please fill all required fields");
+        setLoading(false);
+        return;
+      }
+
+      const payload = {
+        jobName: formData.jobName,
+        jobType: selectedJobType.value,
+        jobDescription: formData.jobDescription,
+        candidateNeeded: parseInt(formData.candidateNeeded),
+        minimumSalary: parseFloat(formData.minimumSalary.replace(/\./g, '')),
+        maximumSalary: parseFloat(formData.maximumSalary.replace(/\./g, '')),
+      };
+
+      console.log("Sending payload:", payload); // Debug
+
+      await axios.post("http://localhost:4000/api/jobs/create", payload); // Hapus /jobs yang double
+
+      setFormData({
+        jobName: "",
+        jobType: null,
+        jobDescription: "",
+        candidateNeeded: "",
+        minimumSalary: "",
+        maximumSalary: "",
+      });
+      setSelectedJobType(null);
+      setOpenModal(false);
+      alert("Job published successfully!");
+    } catch (error) {
+      console.error("Error publishing job:", error.response?.data || error);
+      alert(`Failed: ${error.response?.data?.error || "Server error"}`);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const options = [
     { value: "full-time", label: "Full-time" },
@@ -71,6 +129,8 @@ export default function Modal({ openModal, setOpenModal }) {
         <input
           className="border border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2"
           placeholder="Ex. Front End Engineer"
+          value={formData.jobName}
+          onChange={(e) => handleFormChange("jobName", e.target.value)}
         />
         <label>Job Type*</label>
         <Select
@@ -84,11 +144,15 @@ export default function Modal({ openModal, setOpenModal }) {
         <textarea
           className="border border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2 resize-none h-22"
           placeholder="Ex."
+          value={formData.jobDescription}
+          onChange={(e) => handleFormChange("jobDescription", e.target.value)}
         />
         <label>Number of Candidate Needed*</label>
         <input
           className="border border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2"
           placeholder="Ex. 2"
+          value={formData.candidateNeeded}
+          onChange={(e) => handleFormChange("candidateNeeded", e.target.value)}
         />
         <label>Job Salary</label>
         <div className="flex gap-12">
@@ -96,14 +160,16 @@ export default function Modal({ openModal, setOpenModal }) {
             <label>Minimum Estimated Salary</label>
             <div className="border w-100 border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2">
               <span className="mr-2">Rp</span>
-              <input className="outline-none w-80" placeholder="7.000.000" />
+              <input className="outline-none w-80" placeholder="7.000.000"
+              value={formData.minimumSalary} onChange={(e) => handleFormChange("minimumSalary", e.target.value)} />
             </div>
           </div>
           <div className="flex flex-col gap-4">
             <label>Maximum Estimated Salary</label>
             <div className="border w-100 border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2">
               <span className="mr-2">Rp</span>
-              <input className="outline-none w-80" placeholder="8.000.000" />
+              <input className="outline-none w-80" placeholder="8.000.000" 
+              value={formData.maximumSalary} onChange={(e) => handleFormChange("maximumSalary", e.target.value)} />
             </div>
           </div>
         </div>
@@ -140,7 +206,9 @@ export default function Modal({ openModal, setOpenModal }) {
       </div>
       </div>
       <div className="flex justify-end border-t mt-6 border-gray-300 sticky bottom-0  z-50">
-      <button className="m-6 px-4 py-1 bg-[#01959F] rounded-lg text-white disabled:bg-gray-300 disabled:text-gray-500">Publish Job</button>
+  <button onClick={handlePublishJob} disabled={Loading} className="m-6 px-4 py-1 bg-[#01959F] rounded-lg text-white disabled:bg-gray-300 disabled:text-gray-500">
+    {Loading ? "Publishing..." : "Publish Job"}
+  </button>
       </div>
       </div>
     </div>

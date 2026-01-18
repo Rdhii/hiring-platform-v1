@@ -1,4 +1,16 @@
+import { DollarSign, Map } from "lucide-react";
+
 export default function JobItem({ job, onClick, isActive }) {
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount);
+  }
+
   return (
     <button
       type="button"
@@ -21,8 +33,16 @@ export default function JobItem({ job, onClick, isActive }) {
         </div>
       </div>
       <div className="flex flex-col items-start px-4 pb-3 space-y-2 text-sm text-[#616161] border-dotted border-t border-gray-300">
-        <p>{job.location}</p>
-        <p>{job.maximumSalary}</p>
+        <div className="flex items-center gap-1">
+        <Map className="size-4"/> 
+        <p>Jakarta</p>
+
+        </div>
+        <div className="flex gap-1 items-center">
+          <DollarSign className="size-4"/>
+          <p>{formatCurrency(job.minimumSalary)} - </p>
+        <p>{formatCurrency(job.maximumSalary)}</p>
+        </div>
       </div>
     </button>
   );
