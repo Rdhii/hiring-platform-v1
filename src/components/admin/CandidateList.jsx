@@ -1,4 +1,15 @@
 export default function CandidateList({ candidates }) {
+
+
+  const formatDate = (dateOfBirth) => {
+    const date = new Date(dateOfBirth);
+    return new Intl.DateTimeFormat('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    }).format(date);
+  }
+  
   return (
     <div className="mt-6 space-y-4 px-5">
       <h1 className="font-bold">Front End Developer</h1>
@@ -21,27 +32,27 @@ export default function CandidateList({ candidates }) {
                 </tr>
               </thead>
               <tbody>
-                {candidates.map((candidates) => (
+                {candidates.map((candidate) => (
                   <tr
-                    key={candidates.id}
+                    key={candidate.id}
                     className="border-b border-gray-300 hover:bg-gray-50"
                   >
                     <td className="px-4 py-3">
                       <input type="checkbox" className="h-4 w-4" />
                     </td>
-                    <td className="px-4 py-3">{candidates.name}</td>
-                    <td className="px-4 py-3">{candidates.email}</td>
-                    <td className="px-4 py-3">{candidates.phone}</td>
-                    <td className="px-4 py-3">{candidates.dob}</td>
-                    <td className="px-4 py-3">{candidates.domicile}</td>
-                    <td className="px-4 py-3">{candidates.gender}</td>
+                    <td className="px-4 py-3">{candidate.fullName}</td>
+                    <td className="px-4 py-3">{candidate.email}</td>
+                    <td className="px-4 py-3">{candidate.phoneNumber}</td>
+                    <td className="px-4 py-3">{formatDate(candidate.dateOfBirth)}</td>
+                    <td className="px-4 py-3">{candidate.domicile}</td>
+                    <td className="px-4 py-3">{candidate.gender}</td>
                     <td className="px-4 py-3 text-blue-600 underline">
                       <a
-                        href={candidates.linkedin}
+                        href={candidate.linkedinLink}
                         target="_blank"
                         rel="noreferrer"
                       >
-                        {candidates.linkedin}
+                        {candidate.linkedinLink}
                       </a>
                     </td>
                   </tr>

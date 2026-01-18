@@ -8,7 +8,7 @@ export default function JobLists() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/post/");
+        const response = await axios.get("http://localhost:4000/api/jobs/");
         setJobs(response.data);
       } catch (error) {
         console.error("Error fetching jobs:", error);
@@ -54,7 +54,7 @@ export default function JobLists() {
                 <p className="text-[#616161]">{formatCurrency(job.maximumSalary)}</p>
               </div>
               <Link
-                to="/manage"
+                to={`/admin/jobs/${job.id}/candidates`}
                 className="flex items-end bg-[#01959F] text-white px-4 py-1 text-sm rounded-lg hover:bg-[#017A82]"
               >
                 Manage Job
