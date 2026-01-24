@@ -2,19 +2,51 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import Select from "react-select";
 import axios from "axios";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  jobName: yup.string().required("Job name is required"),
+  jobType: yup.object().nullable().required("Job type is required"),
+  jobDescription: yup.string().required("Job description is required"),
+  candidateNeeded: yup
+    .number()
+    .typeError("Must be a number")
+    .positive("Must be positive")
+    .integer("Must be an integer")
+    .required("Candidate needed is required"),
+  minimumSalary: yup
+    .string()
+    .required("Minimum salary is required")
+    .test("is-number", "Must be a valid number", (value) => {
+      if (!value) return false;
+      const num = parseFloat(value.replace(/\./g, ""));
+      return !isNaN(num) && num > 0;
+    }),
+  maximumSalary: yup
+    .string()
+    .required("Maximum salary is required")
+    .test("is-number", "Must be a valid number", (value) => {
+      if (!value) return false;
+      const num = parseFloat(value.replace(/\./g, ""));
+      return !isNaN(num) && num > 0;
+    })
+    .test(
+      "is-greater",
+      "Maximum salary must be greater than minimum",
+      function (value) {
+        const { minimumSalary } = this.parent;
+        if (!value || !minimumSalary) return true;
+        const max = parseFloat(value.replace(/\./g, ""));
+        const min = parseFloat(minimumSalary.replace(/\./g, ""));
+        return max > min;
+      },
+    ),
+});
 
 export default function Modal({ openModal, setOpenModal }) {
-  const [selectedJobType, setSelectedJobType] = useState(null);
   const [Loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    jobName: "",
-    jobType: null,
-    jobDescription: "",
-    candidateNeeded: "",
-    minimumSalary: "",
-    maximumSalary: "",
-  })
-
   const [profileRequirements, setProfileRequirements] = useState({
     fullName: "Mandatory",
     photoProfile: "Mandatory",
@@ -25,49 +57,47 @@ export default function Modal({ openModal, setOpenModal }) {
     linkedinLink: "Optional",
     dateOfBirth: "Optional",
   });
-
-  const handleFormChange = (field, value) => {
-    setFormData((prev) => ({...prev, [field]:value}));
-  }
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      jobName: "",
+      jobType: null,
+      jobDescription: "",
+      candidateNeeded: "",
+      minimumSalary: "",
+      maximumSalary: "",
+    },
+  });
 
   const handleRequirementChange = (field, value) => {
     setProfileRequirements((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handlePublishJob = async () => {
+  const onSubmit = async (data) => {
     try {
       setLoading(true);
-      
-      // Validasi input
-      if (!formData.jobName || !selectedJobType || !formData.jobDescription || 
-          !formData.candidateNeeded || !formData.minimumSalary || !formData.maximumSalary) {
-        alert("Please fill all required fields");
-        setLoading(false);
-        return;
-      }
 
       const payload = {
-        jobName: formData.jobName,
-        jobType: selectedJobType.value,
-        jobDescription: formData.jobDescription,
-        candidateNeeded: parseInt(formData.candidateNeeded),
-        minimumSalary: parseFloat(formData.minimumSalary.replace(/\./g, '')),
-        maximumSalary: parseFloat(formData.maximumSalary.replace(/\./g, '')),
+        jobName: data.jobName,
+        jobType: data.jobType.value,
+        jobDescription: data.jobDescription,
+        candidateNeeded: parseInt(data.candidateNeeded),
+        minimumSalary: parseFloat(data.minimumSalary.replace(/\./g, "")),
+        maximumSalary: parseFloat(data.maximumSalary.replace(/\./g, "")),
+        profileRequirements,
       };
 
-      console.log("Sending payload:", payload); // Debug
+      console.log("Sending payload:", payload);
 
-      await axios.post("http://localhost:4000/api/jobs/create", payload); // Hapus /jobs yang double
+      await axios.post("http://localhost:4000/api/jobs/create", payload);
 
-      setFormData({
-        jobName: "",
-        jobType: null,
-        jobDescription: "",
-        candidateNeeded: "",
-        minimumSalary: "",
-        maximumSalary: "",
-      });
-      setSelectedJobType(null);
+      reset();
       setOpenModal(false);
       alert("Job published successfully!");
     } catch (error) {
@@ -76,7 +106,7 @@ export default function Modal({ openModal, setOpenModal }) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const options = [
     { value: "full-time", label: "Full-time" },
@@ -112,104 +142,167 @@ export default function Modal({ openModal, setOpenModal }) {
   };
 
   const closeModal = () => {
+    reset();
     setOpenModal(false);
-  }
+  };
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center z-50 ${!openModal ? "hidden" : ""}`}>
+    <div
+      className={`fixed inset-0 flex items-center justify-center z-50 ${!openModal ? "hidden" : ""}`}
+    >
       <div className="absolute inset-0 bg-black/50"></div>
       <div className="relative bg-white flex flex-col w-225 max-h-[80vh] border border-gray-300 rounded-xl shadow-2xl">
-      <div className="flex items-center justify-between p-6 border-b border-gray-300 sticky top-0 z-50">
-        <p className="font-medium">Job Opening</p>
-        <X onClick={closeModal} className="size-5 cursor-pointer" />
-      </div>
-      <div className="overflow-y-auto">
-      <div className="flex flex-col p-6 gap-4 ">
-        <label className="text-sm">Job Name*</label>
-        <input
-          className="border border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2"
-          placeholder="Ex. Front End Engineer"
-          value={formData.jobName}
-          onChange={(e) => handleFormChange("jobName", e.target.value)}
-        />
-        <label>Job Type*</label>
-        <Select
-          options={options}
-          placeholder="Select job type"
-          styles={customStyles}
-          value={selectedJobType}
-          onChange={setSelectedJobType}
-        />
-        <label>Job Description*</label>
-        <textarea
-          className="border border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2 resize-none h-22"
-          placeholder="Ex."
-          value={formData.jobDescription}
-          onChange={(e) => handleFormChange("jobDescription", e.target.value)}
-        />
-        <label>Number of Candidate Needed*</label>
-        <input
-          className="border border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2"
-          placeholder="Ex. 2"
-          value={formData.candidateNeeded}
-          onChange={(e) => handleFormChange("candidateNeeded", e.target.value)}
-        />
-        <label>Job Salary</label>
-        <div className="flex gap-12">
-          <div className="flex flex-col gap-4">
-            <label>Minimum Estimated Salary</label>
-            <div className="border w-100 border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2">
-              <span className="mr-2">Rp</span>
-              <input className="outline-none w-80" placeholder="7.000.000"
-              value={formData.minimumSalary} onChange={(e) => handleFormChange("minimumSalary", e.target.value)} />
-            </div>
-          </div>
-          <div className="flex flex-col gap-4">
-            <label>Maximum Estimated Salary</label>
-            <div className="border w-100 border-gray-300 rounded-lg placeholder-gray-500 px-4 py-2">
-              <span className="mr-2">Rp</span>
-              <input className="outline-none w-80" placeholder="8.000.000" 
-              value={formData.maximumSalary} onChange={(e) => handleFormChange("maximumSalary", e.target.value)} />
-            </div>
-          </div>
+        <div className="flex items-center justify-between p-6 border-b border-gray-300 sticky top-0 z-50">
+          <p className="font-medium">Job Opening</p>
+          <X onClick={closeModal} className="size-5 cursor-pointer" />
         </div>
-      </div>
-      <div className="border mx-6 p-4 rounded-lg border-gray-300">
-        <label>Minimum Profile Information Required</label>
-        <div className="m-4 ">
-          {[
-            { key: "fullName", label: "Full Name" },
-            { key: "photoProfile", label: "Photo Profile" },
-            { key: "gender", label: "Gender"},
-            { key: "domicile", label: "Domicile" },
-            { key: "email", label: "Email" },
-            { key: "phoneNumber", label: "Phone Number" },
-            { key: "linkedinLink", label: "LinkedIn Link" },
-            { key: "dateOfBirth", label: "Date of Birth" },
-          ].map(({ key, label}) => (
-            <div key={key}
-              className="flex justify-between items-center border-b border-gray-200 px-2 py-3">
-                <label>{label}</label>
-                <div className="flex gap-2">
-                  {["Mandatory", "Optional", "Off"].map((item) => (
-                    <button key={item} onClick={() => handleRequirementChange(key, item)}
-                      className={`px-4 py-1 rounded-full border  ${
-                        profileRequirements[key] === item ? "text-[#01959F]" : "border-gray-300"
-                      }`}>
-                      {item}
-                    </button>
-                  ))}
+        <div className="overflow-y-auto">
+          <div className="flex flex-col p-6 gap-4 ">
+            <label className="text-sm">Job Name*</label>
+            <input
+              {...register("jobName")}
+              className={`border rounded-lg placeholder-gray-500 px-4 py-2 ${
+                errors.jobName ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="Ex. Front End Engineer"
+            />
+            {errors.jobName && (
+              <p className="text-red-500 text-sm">{errors.jobName.message}</p>
+            )}
+            <label>Job Type*</label>
+            <Controller
+              name="jobType"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  options={options}
+                  placeholder="Select job type"
+                  styles={customStyles}
+                />
+              )}
+            />
+            {errors.jobType && (
+              <p className="text-red-500 text-sm">{errors.jobType.message}</p>
+            )}
+            <label>Job Description*</label>
+            <textarea
+              {...register("jobDescription")}
+              className={`border rounded-lg placeholder-gray-500 px-4 py-2 resize-none h-22 ${
+                errors.jobDescription ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="Ex."
+            />
+            {errors.jobDescription && (
+              <p className="text-red-500 text-sm">
+                {errors.jobDescription.message}
+              </p>
+            )}
+            <label>Number of Candidate Needed*</label>
+            <input
+              {...register("candidateNeeded")}
+              className={`border rounded-lg placeholder-gray-500 px-4 py-2 ${
+                errors.candidateNeeded ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="Ex. 2"
+            />
+            {errors.candidateNeeded && (
+              <p className="text-red-500 text-sm">
+                {errors.candidateNeeded.message}
+              </p>
+            )}
+            <label>Job Salary</label>
+            <div className="flex gap-12">
+              <div className="flex flex-col gap-4">
+                <label>Minimum Estimated Salary</label>
+                <div
+                  className={`border w-100 rounded-lg px-4 py-2 ${
+                    errors.minimumSalary ? "border-red-500" : "border-gray-300"
+                  }`}
+                >
+                  <span className="mr-2">Rp</span>
+                  <input
+                    {...register("minimumSalary")}
+                    className="outline-none w-80"
+                    placeholder="7.000.000"
+                  />
                 </div>
+                {errors.minimumSalary && (
+                  <p className="text-red-500 text-sm">
+                    {errors.minimumSalary.message}
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-col gap-4">
+                <label>Maximum Estimated Salary</label>
+                <div
+                  className={`border w-100 rounded-lg px-4 py-2 ${
+                    errors.maximumSalary ? "border-red-500" : "border-gray-300"
+                  }`}
+                >
+                  <span className="mr-2">Rp</span>
+                  <input
+                    {...register("maximumSalary")}
+                    className="outline-none w-80"
+                    placeholder="8.000.000"
+                  />
+                </div>
+                {errors.maximumSalary && (
+                  <p className="text-red-500 text-sm">
+                    {errors.maximumSalary.message}
+                  </p>
+                )}
+              </div>
             </div>
-          ))}
+          </div>
+          <div className="border mx-6 p-4 rounded-lg border-gray-300">
+            <label>Minimum Profile Information Required</label>
+            <div className="m-4 ">
+              {[
+                { key: "fullName", label: "Full Name" },
+                { key: "photoProfile", label: "Photo Profile" },
+                { key: "gender", label: "Gender" },
+                { key: "domicile", label: "Domicile" },
+                { key: "email", label: "Email" },
+                { key: "phoneNumber", label: "Phone Number" },
+                { key: "linkedinLink", label: "LinkedIn Link" },
+                { key: "dateOfBirth", label: "Date of Birth" },
+              ].map(({ key, label }) => (
+                <div
+                  key={key}
+                  className="flex justify-between items-center border-b border-gray-200 px-2 py-3"
+                >
+                  <label>{label}</label>
+                  <div className="flex gap-2">
+                    {["Mandatory", "Optional", "Off"].map((item) => (
+                      <button
+                        key={item}
+                        onClick={() => handleRequirementChange(key, item)}
+                        className={`px-4 py-1 rounded-full border  ${
+                          profileRequirements[key] === item
+                            ? "text-[#01959F]"
+                            : "border-gray-300"
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-      </div>
-      <div className="flex justify-end border-t mt-6 border-gray-300 sticky bottom-0  z-50">
-  <button onClick={handlePublishJob} disabled={Loading} className="m-6 px-4 py-1 bg-[#01959F] rounded-lg text-white disabled:bg-gray-300 disabled:text-gray-500">
-    {Loading ? "Publishing..." : "Publish Job"}
-  </button>
-      </div>
+        <div className="flex justify-end border-t mt-6 border-gray-300 sticky bottom-0  z-50">
+          <button
+              onClick={handleSubmit(onSubmit)}
+              type="submit"
+              disabled={Loading}
+              className="m-6 px-4 py-1 bg-[#01959F] rounded-lg text-white disabled:bg-gray-300 disabled:text-gray-500"
+            >
+              {Loading ? "Publishing..." : "Publish Job"}
+            </button>
+        </div>
       </div>
     </div>
   );
