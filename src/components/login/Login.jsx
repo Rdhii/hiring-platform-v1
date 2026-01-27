@@ -1,21 +1,21 @@
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 const validationSchema = yup.object().shape({
-  email: yup.string().email('Email tidak valid').required('Email wajib diisi'),
-  password: yup.string().min(6, 'Kata sandi minimal 6 karakter').required('Kata sandi wajib diisi')
+    email: yup.string().email('Email tidak valid').required('Email wajib disini'),
+    password: yup.string().min(8, 'Kata sandi salah').required('Kata sandi wajib disini')
 })
 
 export default function Login() {
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(validationSchema)
-  })
 
-  const onSubmit = (data) => {
-    console.log(data)
-    // Handle login logic here
-  }
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(validationSchema)
+    })
+
+    const onSubmit = (data) => {
+        console.log(data);
+    }
 
   return (
     <div className='my-51 flex justify-center'>
@@ -23,28 +23,21 @@ export default function Login() {
             <img src="logo-rakamin.png" className='w-35' />
             <div className='p-10 space-y-4 shadow-lg'>
                 <h1 className='text-xl font-semibold'>Masuk ke Rakamin</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className='flex flex-col gap-2'>
-                      <label className='text-sm text-[#404040]'>Alamat Email</label>
-                      <input 
-                        {...register('email')}
-                        placeholder='Masukan email' 
-                        className='px-4 py-2 rounded-lg border border-gray-300' 
-                      />
-                      {errors.email && <p className='text-red-500 text-sm'>{errors.email.message}</p>}
-                  </div>
-                  <div className='flex flex-col gap-2'>
-                      <label className='text-sm text-[#404040]'>Kata Sandi</label>
-                      <input 
-                        {...register('password')}
-                        type='password' 
-                        placeholder='Masukan kata sandi' 
-                        className='px-4 py-2 rounded-lg border border-gray-300' 
-                      />
-                      {errors.password && <p className='text-red-500 text-sm'>{errors.password.message}</p>}
-                  </div>
-                  <button type='submit' className='bg-[#FBC037] text-[#404040] font-semibold w-full py-1.5 rounded-lg'>Masuk</button>
-                </form>
+                <div className='flex flex-col gap-2'>
+                    <label className='text-sm text-[#404040]'>Alamat Email</label>
+                    <input 
+                    {...register('email')}
+                    placeholder='Masukan email' className='px-4 py-2 rounded-lg border border-gray-300' />
+                    {errors.email && <p className='text-red-500 text-sm'>{errors.email.message}</p>}
+                </div>
+                <div className='flex flex-col gap-2'>
+                    <label className='text-sm text-[#404040]'>Kata Sandi</label>
+                    <input
+                    {...register('password')}
+                    placeholder='Masukan kata sandi' className='px-4 py-2 rounded-lg border border-gray-300' />
+                    {errors.password && <p className='text-red-500 text-sm'>{errors.password.message}</p>}
+                </div>
+                <button onClick={handleSubmit(onSubmit)} className='bg-[#FBC037] text-[#404040] font-semibold w-full py-1.5 rounded-lg hover:cursor-pointer'>Masuk</button>
             </div>
 
         </div>
