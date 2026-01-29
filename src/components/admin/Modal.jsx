@@ -90,7 +90,7 @@ export default function Modal({ openModal, setOpenModal }) {
         candidateNeeded: parseInt(data.candidateNeeded),
         minimumSalary: parseFloat(data.minimumSalary.replace(/\./g, "")),
         maximumSalary: parseFloat(data.maximumSalary.replace(/\./g, "")),
-        profileRequirements,
+        profileRequired: profileRequirements,
       };
 
       console.log("Sending payload:", payload);
