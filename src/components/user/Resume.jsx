@@ -137,7 +137,7 @@ export default function Resume() {
     <div className="flex flex-col items-center">
       <div className="flex flex-col mt-12.5 border border-gray-300 w-175 ">
         <div className="flex items-center gap-4 px-10 pt-10 pb-6">
-          <button className="cursor-pointer">
+          <button className="cursor-pointer hover:scale-125 transition-transform">
             <ArrowLeftIcon className="size-5 border border-gray-300 rounded-lg shadow-xl" />
           </button>
           <p>Apply Front End at Rakamin</p>
@@ -372,7 +372,7 @@ export default function Resume() {
           </div>
         </div>
       </div>
-      <div className="mb-12 mt-6 mx-10 w-full flex justify-center hover:scale-105 transition-transform">
+      <div className="mb-12 mt-6 mx-10 w-full flex justify-center hover:scale-102 transition-transform">
         <button
           className=" px-70.5 py-1.5 bg-[#01959F] text-white rounded-lg cursor-pointer"
           onClick={handleSubmit(onSubmit)}
