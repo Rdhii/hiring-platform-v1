@@ -136,4 +136,4 @@ Proyek ini bersifat private.
 
 ---
 
-⭐ Jika proyek ini bermanfaat, jangan lupa berikan star di repository!
+⭐ Jika proyek ini bermanfaat, jangan lupa berikan star di repository!!!
