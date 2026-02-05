@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utils/axiosConfig";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -8,7 +8,7 @@ export default function JobLists() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/jobs/");
+        const response = await axios.get("/jobs");
         setJobs(response.data);
       } catch (error) {
         console.error("Error fetching jobs:", error);
