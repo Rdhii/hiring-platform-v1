@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 import { useParams } from 'react-router-dom';
 import NavbarManage from '../components/admin/NavbarManage'
 import EmptyManage from '../components/admin/EmptyManage'
@@ -16,7 +16,7 @@ export default function ManagePage() {
     const fetchCandidates = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:4000/api/jobs/${id}/candidates`);
+        const response = await axios.get(`/jobs/${id}/candidates`);
         setCandidates(response.data);
       } catch (err) {
         setError(err?.response?.data?.message || "Gagal memuat data");
