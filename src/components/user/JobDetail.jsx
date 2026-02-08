@@ -19,13 +19,18 @@ export default function JobDetail({ job }) {
             <p className="text-[14px] text-[#757575]">Rakamin</p>
           </div>
         </div>
-        <Link to="/resume" className="bg-[#FBC037] rounded-lg px-4 py-1 text-[14px] cursor-pointer hover:bg-[#E0A800] font-semibold">Apply</Link>
+        <Link
+          to={`/resume/${job.id}`}
+          className="bg-[#FBC037] rounded-lg px-4 py-1 text-[14px] cursor-pointer hover:bg-[#E0A800] font-semibold"
+        >
+          Apply
+        </Link>
       </div>
       <div className="mt-6 ">
         <ul className="list-disc pl-6  text-[14px] leading-relaxed text-[#404040]">
           {job.jobDescription
-            ?.split('\n')
-            .filter(item => item.trim() !== '')
+            ?.split("\n")
+            .filter((item) => item.trim() !== "")
             .map((item, idx) => (
               <li key={idx}>{item.trim()}</li>
             ))}
