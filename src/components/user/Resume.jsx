@@ -26,7 +26,7 @@ const createDynamicSchema = (profileRequired) => {
 
   // Full Name
   if (profileRequired.fullName !== "Off") {
-    schemaFields.fullName = yup.string();
+    schemaFields.fullName = yup.string().nullable();
     if (profileRequired.fullName === "Mandatory") {
       schemaFields.fullName = schemaFields.fullName.required(
         "Full name is required",
@@ -109,15 +109,9 @@ export default function Resume() {
 
   // Dynamic schema
   const [validationSchema, setValidationSchema] = useState(null);
-
-  // Existing states
   const [imagePreview, setImagePreview] = useState("/default-profile.jpg");
-  // const [dateOfBirth, setDateOfBirth] = useState(null);
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
-  // const [selectedProvince, setSelectedProvince] = useState("");
-  // const [selectedCity, setSelectedCity] = useState("");
-  // const [phoneNumber, setPhoneNumber] = useState("62");
   const [selectedCountry, setSelectedCountry] = useState("id");
 
   // Helper functions for field visibility
@@ -154,27 +148,6 @@ export default function Resume() {
   });
 
   const selectedProvince = watch("province");
-
-  // const handlePhoneChange = (phone, data) => {
-  //   // Ambil country code dari data object
-  //   const countryCode = data.dialCode;
-
-  //   // Validasi agar country code tidak bisa dihapus
-  //   if (phone && phone.startsWith(countryCode)) {
-  //     setPhoneNumber(phone);
-  //   } else if (phone === "" || phone === "+") {
-  //     setPhoneNumber(countryCode);
-  //   } else {
-  //     // Jika user menghapus country code, kembalikan ke country code yang sesuai
-  //     setPhoneNumber(countryCode + phone.replace(/\D/g, "").replace(new RegExp(`^${countryCode}`), ""));
-  //   }
-  // };
-
-  // const handleCountryChange = (phone, data) => {
-  //   // Ketika negara berubah, update country code ke state
-  //   setSelectedCountry(data.countryCode.toLowerCase());
-  //   setPhoneNumber(data.dialCode);
-  // };
 
   // Fetch job details from API
   useEffect(() => {
