@@ -106,8 +106,6 @@ export default function Resume() {
   const [profileRequired, setProfileRequired] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Dynamic schema
   const [validationSchema, setValidationSchema] = useState(null);
   const [imagePreview, setImagePreview] = useState("/default-profile.jpg");
   const [provinces, setProvinces] = useState([]);
