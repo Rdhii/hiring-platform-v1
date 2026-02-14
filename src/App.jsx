@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import "./App.css";
 import AdminPage from "./pages/AdminPage";
@@ -8,6 +9,13 @@ import Resume from "./components/user/Resume";
 import Register from "./components/login/Register";
 
 function App() {
+
+  const [token, setToken] = useState();
+
+  if (!token) {
+    return <Login setToken={setToken} />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
