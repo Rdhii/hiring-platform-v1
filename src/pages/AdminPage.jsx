@@ -4,6 +4,7 @@ import HeroSection from '../components/admin/HeroSection'
 import CreateCard from '../components/admin/CreateCard'
 import JobLists from '../components/admin/JobLists'
 import Modal from '../components/admin/Modal'
+// import JobModal from '../components/admin/modal/JobModal'
 import { useState } from 'react'
 
 export default function AdminPage() {
