@@ -14,14 +14,14 @@ export default function ProfileRequirement({
   ];
 
   return (
-    <div className="border p-4 rounded-lg border-gray-300">
+    <div className="border mx-4 p-4 rounded-lg border-gray-300">
       <label>Minimum Profile Information Required</label>
 
       <div className="m-4">
         {fields.map(({ key, label }) => (
           <div
             key={key}
-            className="flex justify-between items-center border-b px-2 py-3"
+            className="flex justify-between items-center border-b border-gray-300 px-2 py-3"
           >
             <label>{label}</label>
 

@@ -3,8 +3,8 @@ import SearchInput from '../components/admin/SearchInput'
 import HeroSection from '../components/admin/HeroSection'
 import CreateCard from '../components/admin/CreateCard'
 import JobLists from '../components/admin/JobLists'
-import Modal from '../components/admin/Modal'
-// import JobModal from '../components/admin/modal/JobModal'
+// import Modal from '../components/admin/Modal'
+import JobModal from '../components/admin/modal/JobModal'
 import { useState } from 'react'
 
 export default function AdminPage() {
@@ -23,7 +23,7 @@ const [openModal, setOpenModal] = useState(false);
             <JobLists />
           </div>
           <CreateCard handleOpenModal={handleOpenModal} />
-          <Modal openModal={openModal} setOpenModal={setOpenModal} />
+          <JobModal openModal={openModal} setOpenModal={setOpenModal} />
         </div>
     </div>
   )

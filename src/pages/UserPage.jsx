@@ -62,8 +62,8 @@ export default function UserPage() {
           <EmptyState />
         </div>
       ) : (
-        <div className="flex gap-6 mt-10">
-          <div className="space-y-4">
+        <div className="flex gap-6 mt-10 px-26 mb-10">
+          <div className="space-y-4 w-[384px] shrink-0">
             {jobItems.map((job) => (
               <JobItem
                 key={job.id}

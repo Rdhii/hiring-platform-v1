@@ -10,14 +10,14 @@ export default function SalaryInput({
       <label>{label}</label>
 
       <div
-        className={`border rounded-lg px-4 py-2 ${
+        className={`border w-100 rounded-lg px-4 py-2 ${
           error ? "border-red-500" : "border-gray-300"
         }`}
       >
         <span className="mr-2">Rp</span>
         <input
           {...register(name)}
-          className="outline-none w-full"
+          className="outline-none"
           placeholder={placeholder}
         />
       </div>

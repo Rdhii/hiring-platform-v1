@@ -4,7 +4,7 @@ export default function JobDetail({ job }) {
   if (!job) return null;
 
   return (
-    <div className="border mr-26 mb-10 w-full p-6 rounded-lg border-[#E0E0E0] min-h-screen flex flex-col">
+    <div className="border flex-1 min-w-0 p-6 rounded-lg border-[#E0E0E0] min-h-screen flex flex-col">
       <div className="flex justify-between items-start border-b pb-6 border-[#E0E0E0]">
         <div className="flex gap-6">
           <img

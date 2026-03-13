@@ -289,7 +289,7 @@ export default function Resume() {
         <>
           <div className="flex flex-col mt-12.5 border border-gray-300 w-175 ">
             <div className="flex items-center gap-4 px-10 pt-10 pb-6">
-              <button className="cursor-pointer hover:scale-125 transition-transform">
+              <button onClick={() => navigate("/user")} className="cursor-pointer hover:scale-125 transition-transform">
                 <ArrowLeftIcon className="size-5 border border-gray-300 rounded-lg shadow-xl" />
               </button>
               <p>Apply {jobDetails?.jobName || "Job"} at Rakamin</p>
