@@ -230,6 +230,7 @@ export default function Resume() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setValue("profilePhoto", file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function JobLists() {
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -12,6 +13,8 @@ export default function JobLists() {
         setJobs(response.data);
       } catch (error) {
         console.error("Error fetching jobs:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchJobs();
@@ -34,6 +37,10 @@ export default function JobLists() {
             maximumFractionDigits: 0
         }).format(amount);
     };
+
+  if (loading) {
+    return  <div className="text-center mt-10">Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col gap-4">

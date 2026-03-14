@@ -15,7 +15,7 @@ export default function JobItem({ job, onClick, isActive }) {
     <button
       type="button"
       onClick={onClick}
-      className={`border rounded-lg w-[384px] ${
+      className={`border rounded-lg w-[384px] cursor-pointer ${
         isActive
           ? "border-[#01777F] bg-[#146166]/10"
           : "border-[#E0E0E0] bg-white"
