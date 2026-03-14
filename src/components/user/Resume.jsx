@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utils/axiosConfig";
 import { ArrowLeftIcon, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -239,36 +239,89 @@ export default function Resume() {
     }
   };
 
-  const onSubmit = async (data) => {
-    try {
-      // Filter out empty/undefined values from hidden fields
-      const filteredData = Object.keys(data).reduce((acc, key) => {
-        if (data[key] !== undefined && data[key] !== null && data[key] !== "") {
-          acc[key] = data[key];
-        }
-        return acc;
-      }, {});
+// const onSubmit = async (data) => {
+//   try {
+//     const selectedProvinceData = provinces.find(
+//       (province) => province.id === data.province,
+//     );
+//     const selectedCityData = cities.find(
+//       (city) => city.id === data.city,
+//     );
 
-      const payload = {
-        jobId: parseInt(jobId),
-        ...filteredData,
-        dateOfBirth: data.dateOfBirth
-          ? data.dateOfBirth.toISOString()
-          : undefined,
-      };
+//     const formData = new FormData();
 
-      console.log("Submitting application:", payload);
+//     formData.append("jobId", String(Number(jobId)));
 
-      // TODO: Replace with actual API call
-      // await axios.post('/applications', payload);
+//     if (data.fullName) formData.append("fullName", data.fullName);
+//     if (data.dateOfBirth) {
+//       formData.append("dateOfBirth", data.dateOfBirth.toISOString());
+//     }
+//     if (data.gender) formData.append("gender", data.gender);
+//     if (data.phoneNumber) formData.append("phoneNumber", data.phoneNumber);
+//     if (data.email) formData.append("email", data.email);
+//     if (data.linkedin) formData.append("linkedinLink", data.linkedin);
+//     if (data.profilePhoto) formData.append("profilePhoto", data.profilePhoto);
 
-      alert("Application submitted successfully!");
-      navigate("/user");
-    } catch (error) {
-      console.error("Error submitting application:", error);
-      alert("Failed to submit application. Please try again.");
-    }
-  };
+//     if (selectedProvinceData || selectedCityData) {
+//       const domicile = [selectedCityData?.nama, selectedProvinceData?.nama]
+//         .filter(Boolean)
+//         .join(", ");
+//       formData.append("domicile", domicile);
+//     }
+
+//     const response = await axios.post(
+//       `/jobs/${jobId}/candidates`,
+//       formData,
+//       {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//         },
+//       },
+//     );
+
+//     console.log("Submitting application:", response.data);
+//     alert("Application submitted successfully!");
+//     navigate("/user");
+//   } catch (error) {
+//     console.error("Error submitting application:", error.response?.data || error);
+//     alert(error.response?.data?.message || "Failed to submit application. Please try again.");
+//   }
+// };
+
+const onSubmit = async (data) => {
+  try {
+    const selectedProvinceData = provinces.find(
+      (province) => province.id === data.province,
+    );
+    const selectedCityData = cities.find(
+      (city) => city.id === data.city,
+    );
+
+    const domicile = [selectedCityData?.nama, selectedProvinceData?.nama]
+      .filter(Boolean)
+      .join(", ");
+
+    const payload = {
+      jobId: Number(jobId),
+      fullName: data.fullName,
+      dateOfBirth: data.dateOfBirth?.toISOString(),
+      gender: data.gender,
+      phoneNumber: data.phoneNumber,
+      email: data.email,
+      linkedinLink: data.linkedin,
+      domicile,
+    };
+
+    const response = await axios.post(`/jobs/${jobId}/candidates`, payload);
+
+    console.log("Submitting application:", response.data);
+    alert("Application submitted successfully!");
+    navigate("/user");
+  } catch (error) {
+    console.error("Error submitting application:", error.response?.data || error);
+    alert(error.response?.data?.message || "Failed to submit application. Please try again.");
+  }
+};
 
   return (
     <div className="flex flex-col items-center">
