@@ -12,86 +12,68 @@ import * as yup from "yup";
 import clsx from "clsx";
 
 const createDynamicSchema = (profileRequired) => {
+  const fieldConfigs = [
+    {
+      key: "photoProfile",
+      setting: profileRequired.photoProfile,
+      base: yup.mixed().nullable(),
+      required: yup.mixed().required("Photo profile is required"),
+    },
+    {
+      key: "fullName",
+      setting: profileRequired.fullName,
+      base: yup.string().nullable(),
+      required: yup.string().required("Full name is required"),
+    },
+    {
+      key: "dateOfBirth",
+      setting: profileRequired.dateOfBirth,
+      base: yup.date().nullable(),
+      required: yup.date().nullable().required("Date of birth is required"),
+    },
+    {
+      key: "gender",
+      setting: profileRequired.gender,
+      base: yup.string(),
+      required: yup.string().required("Gender is required"),
+    },
+    {
+      key: "phoneNumber",
+      setting: profileRequired.phoneNumber,
+      base: yup.string().min(10, "Please enter a valid phone number"),
+      required: yup.string().min(10, "Please enter a valid phone number").required("Phone number is required"),
+    },
+    {
+      key: "email",
+      setting: profileRequired.email,
+      base: yup.string().email("Invalid email format"),
+      required: yup.string().email("Invalid email format").required("Email is required"),
+    },
+    {
+      key: "linkedin",
+      setting: profileRequired.linkedinLink,
+      base: yup.string().url("Invalid URL format"),
+      required: yup.string().url("Invalid URL format").required("LinkedIn profile is required"),
+    },
+  ];
+
   const schemaFields = {};
 
-  // Photo Profile
-  if (profileRequired.photoProfile !== "Off") {
-    schemaFields.profilePhoto = yup.mixed().nullable();
-    if (profileRequired.photoProfile === "Mandatory") {
-      schemaFields.profilePhoto = yup
-        .mixed()
-        .required("Photo profile is required");
+  for (const { key, setting, base, required } of fieldConfigs) {
+    if (setting !== "Off") {
+      schemaFields[key] = setting === "Mandatory" ? required : base;
     }
   }
 
-  // Full Name
-  if (profileRequired.fullName !== "Off") {
-    schemaFields.fullName = yup.string().nullable();
-    if (profileRequired.fullName === "Mandatory") {
-      schemaFields.fullName = schemaFields.fullName.required(
-        "Full name is required",
-      );
-    }
-  }
-
-  // Date of Birth
-  if (profileRequired.dateOfBirth !== "Off") {
-    schemaFields.dateOfBirth = yup.date().nullable();
-    if (profileRequired.dateOfBirth === "Mandatory") {
-      schemaFields.dateOfBirth = schemaFields.dateOfBirth.required(
-        "Date of birth is required",
-      );
-    }
-  }
-
-  // Gender
-  if (profileRequired.gender !== "Off") {
-    schemaFields.gender = yup.string();
-    if (profileRequired.gender === "Mandatory") {
-      schemaFields.gender = schemaFields.gender.required("Gender is required");
-    }
-  }
-
-  // Domicile (controls both province and city)
+  // Domicile dihandle terpisah karena mengontrol 2 field (province & city)
   if (profileRequired.domicile !== "Off") {
-    schemaFields.province = yup.string();
-    schemaFields.city = yup.string();
-    if (profileRequired.domicile === "Mandatory") {
-      schemaFields.province = schemaFields.province.required(
-        "Province is required",
-      );
-      schemaFields.city = schemaFields.city.required("City is required");
-    }
-  }
-
-  // Phone Number
-  if (profileRequired.phoneNumber !== "Off") {
-    schemaFields.phoneNumber = yup
-      .string()
-      .min(10, "Please enter a valid phone number");
-    if (profileRequired.phoneNumber === "Mandatory") {
-      schemaFields.phoneNumber = schemaFields.phoneNumber.required(
-        "Phone number is required",
-      );
-    }
-  }
-
-  // Email
-  if (profileRequired.email !== "Off") {
-    schemaFields.email = yup.string().email("Invalid email format");
-    if (profileRequired.email === "Mandatory") {
-      schemaFields.email = schemaFields.email.required("Email is required");
-    }
-  }
-
-  // LinkedIn
-  if (profileRequired.linkedinLink !== "Off") {
-    schemaFields.linkedin = yup.string().url("Invalid URL format");
-    if (profileRequired.linkedinLink === "Mandatory") {
-      schemaFields.linkedin = schemaFields.linkedin.required(
-        "LinkedIn profile is required",
-      );
-    }
+    const isMandatory = profileRequired.domicile === "Mandatory";
+    schemaFields.province = isMandatory
+      ? yup.string().required("Province is required")
+      : yup.string();
+    schemaFields.city = isMandatory
+      ? yup.string().required("City is required")
+      : yup.string();
   }
 
   return yup.object().shape(schemaFields);
@@ -141,7 +123,7 @@ export default function Resume() {
       phoneNumber: "62",
       email: "",
       linkedin: "",
-      profilePhoto: null,
+      photoProfile: null,
     },
   });
 
@@ -230,7 +212,7 @@ export default function Resume() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setValue("profilePhoto", file);
+      setValue("photoProfile", file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -238,55 +220,6 @@ export default function Resume() {
       reader.readAsDataURL(file);
     }
   };
-
-// const onSubmit = async (data) => {
-//   try {
-//     const selectedProvinceData = provinces.find(
-//       (province) => province.id === data.province,
-//     );
-//     const selectedCityData = cities.find(
-//       (city) => city.id === data.city,
-//     );
-
-//     const formData = new FormData();
-
-//     formData.append("jobId", String(Number(jobId)));
-
-//     if (data.fullName) formData.append("fullName", data.fullName);
-//     if (data.dateOfBirth) {
-//       formData.append("dateOfBirth", data.dateOfBirth.toISOString());
-//     }
-//     if (data.gender) formData.append("gender", data.gender);
-//     if (data.phoneNumber) formData.append("phoneNumber", data.phoneNumber);
-//     if (data.email) formData.append("email", data.email);
-//     if (data.linkedin) formData.append("linkedinLink", data.linkedin);
-//     if (data.profilePhoto) formData.append("profilePhoto", data.profilePhoto);
-
-//     if (selectedProvinceData || selectedCityData) {
-//       const domicile = [selectedCityData?.nama, selectedProvinceData?.nama]
-//         .filter(Boolean)
-//         .join(", ");
-//       formData.append("domicile", domicile);
-//     }
-
-//     const response = await axios.post(
-//       `/jobs/${jobId}/candidates`,
-//       formData,
-//       {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       },
-//     );
-
-//     console.log("Submitting application:", response.data);
-//     alert("Application submitted successfully!");
-//     navigate("/user");
-//   } catch (error) {
-//     console.error("Error submitting application:", error.response?.data || error);
-//     alert(error.response?.data?.message || "Failed to submit application. Please try again.");
-//   }
-// };
 
 const onSubmit = async (data) => {
   try {
@@ -297,22 +230,36 @@ const onSubmit = async (data) => {
       (city) => city.id === data.city,
     );
 
-    const domicile = [selectedCityData?.nama, selectedProvinceData?.nama]
-      .filter(Boolean)
-      .join(", ");
+    const formData = new FormData();
 
-    const payload = {
-      jobId: Number(jobId),
-      fullName: data.fullName,
-      dateOfBirth: data.dateOfBirth?.toISOString(),
-      gender: data.gender,
-      phoneNumber: data.phoneNumber,
-      email: data.email,
-      linkedinLink: data.linkedin,
-      domicile,
-    };
+    formData.append("jobId", String(Number(jobId)));
 
-    const response = await axios.post(`/jobs/${jobId}/candidates`, payload);
+    if (data.fullName) formData.append("fullName", data.fullName);
+    if (data.dateOfBirth) {
+      formData.append("dateOfBirth", data.dateOfBirth.toISOString());
+    }
+    if (data.gender) formData.append("gender", data.gender);
+    if (data.phoneNumber) formData.append("phoneNumber", data.phoneNumber);
+    if (data.email) formData.append("email", data.email);
+    if (data.linkedin) formData.append("linkedinLink", data.linkedin);
+    if (data.photoProfile) formData.append("photoProfile", data.photoProfile);
+
+    if (selectedProvinceData || selectedCityData) {
+      const domicile = [selectedCityData?.nama, selectedProvinceData?.nama]
+        .filter(Boolean)
+        .join(", ");
+      formData.append("domicile", domicile);
+    }
+
+    const response = await axios.post(
+      `/jobs/${jobId}/candidates`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
 
     console.log("Submitting application:", response.data);
     alert("Application submitted successfully!");
@@ -322,6 +269,41 @@ const onSubmit = async (data) => {
     alert(error.response?.data?.message || "Failed to submit application. Please try again.");
   }
 };
+
+// const onSubmit = async (data) => {
+//   try {
+//     const selectedProvinceData = provinces.find(
+//       (province) => province.id === data.province,
+//     );
+//     const selectedCityData = cities.find(
+//       (city) => city.id === data.city,
+//     );
+
+//     const domicile = [selectedCityData?.nama, selectedProvinceData?.nama]
+//       .filter(Boolean)
+//       .join(", ");
+
+//     const payload = {
+//       jobId: Number(jobId),
+//       fullName: data.fullName,
+//       dateOfBirth: data.dateOfBirth?.toISOString(),
+//       gender: data.gender,
+//       phoneNumber: data.phoneNumber,
+//       email: data.email,
+//       linkedinLink: data.linkedin,
+//       domicile,
+//     };
+
+//     const response = await axios.post(`/jobs/${jobId}/candidates`, payload);
+
+//     console.log("Submitting application:", response.data);
+//     alert("Application submitted successfully!");
+//     navigate("/user");
+//   } catch (error) {
+//     console.error("Error submitting application:", error.response?.data || error);
+//     alert(error.response?.data?.message || "Failed to submit application. Please try again.");
+//   }
+// };
 
   return (
     <div className="flex flex-col items-center">

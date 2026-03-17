@@ -1,8 +1,9 @@
 import axios from "../../utils/axiosConfig";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import HeroSection from "./HeroSection";
 
-export default function JobLists() {
+export default function JobLists({ handleOpenModal }) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,6 +41,10 @@ export default function JobLists() {
 
   if (loading) {
     return  <div className="text-center mt-10">Loading...</div>;
+  }
+
+  if (jobs.length === 0) {
+    return <HeroSection handleOpenModal={handleOpenModal} />;
   }
 
   return (

@@ -20,7 +20,7 @@ const [openModal, setOpenModal] = useState(false);
         <div className='flex'>
           <div className='flex flex-col w-250'>
             <SearchInput />
-            <JobLists />
+            <JobLists handleOpenModal={handleOpenModal} />
           </div>
           <CreateCard handleOpenModal={handleOpenModal} />
           <JobModal openModal={openModal} setOpenModal={setOpenModal} />
